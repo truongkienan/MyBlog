@@ -364,3 +364,4 @@ FodyWeavers.xsd
 /WebApp/bundleconfig.json
 /WebApp/appsettings.json
 /WebApp/ScaffoldingReadMe.txt
+/WebApp/appsettings.Development.json
