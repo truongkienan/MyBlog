@@ -1,0 +1,78 @@
+﻿@model Topic
+@{
+    ViewData["Title"] = $"Edit - {Model.TopicName}";
+    Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
+}
+
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="/dashboard/topic/@Model.CategoryUrl">@Model.CategoryName</a></li>
+    <li class="breadcrumb-item active">@Model.TopicName</li>
+</ol>
+<div asp-validation-summary="All"></div>
+<div class="card mb-4 mt-4">
+    <div class="card-header d-flex justify-content-between">
+        <div>
+            <i class="fas fa-edit mr-1"></i>
+            Edit
+        </div>
+        <div>
+            <a href="#down"><i class="fa-solid fa-circle-down"></i></a>
+        </div>
+    </div>
+
+    <div class="card-body" >
+        <form method="post" action="/dashboard/topic/edit/@Model.TopicId">
+            <input type="hidden" asp-for="TopicId"/>
+            <input type="hidden" asp-for="TopicUrl" />
+            <input type="hidden" asp-for="CategoryName" />
+            <input type="hidden" asp-for="CategoryUrl" />
+            <div class="form-group mb-2">
+                <label asp-for="TopicName">Topic Name</label>
+                <input class="form-control" type="text" asp-for="TopicName" />
+                <span asp-validation-for="TopicName"></span>
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="TopicUrl">Column Index</label>
+                        <select asp-for="ColumnIndex" class="form-select form-select-sm">
+                            <option selected value="0">One</option>
+                            <option value="1">Two</option>
+                            <option value="2">Three</option>
+                            <option value="3">Four</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="Active">Active</label>
+                        <select asp-for="Active" class="form-select form-select-sm">
+                            <option selected value="true">Enable</option>
+                            <option value="false">Disable</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group mb-2" onclick="window.location.hash='back'; ">
+                <label asp-for="Content">Content</label>
+                <textarea class="form-control" asp-for="Content">@Html.Raw(Model.Content)</textarea>
+                <span asp-validation-for="Content"></span>
+            </div>
+            <div class="form-group d-flex justify-content-between" id="down">
+                <div>
+                    <button type="submit" class="btn btn-primary">
+                        Save
+                    </button>
+                </div>
+                <div>
+                    <a href="#up">
+                        <i class="fa-solid fa-circle-up"></i>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="~/ckeditor5/build/ckeditor.js"></script>
+<script src="~/js/ckeditor-config.js"></script>

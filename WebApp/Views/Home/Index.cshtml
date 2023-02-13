@@ -1,0 +1,34 @@
+﻿@model Tuple<Category, List<Topic>[]>;
+@{
+    ViewData["Title"] = Model.Item1.CategoryName;
+}
+
+<style>
+    a.small:hover{
+        text-decoration:underline;
+    }
+</style>
+<div class="row">
+    @if (Model.Item2 is not null)
+    {
+        for (byte i = 0; i < 4; i++)
+        {
+            <div class="col-xl-3 col-md-6 d-flex flex-column">
+                <ul>
+                    @foreach (Topic item in Model.Item2[i])
+                    {
+                        <li>
+                            <a class="small text-black" href="/@Model.Item1.CategoryUrl/@item.TopicUrl">@item.TopicName</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+    }
+    else
+    {
+        <span>
+            There is no article for this topic
+        </span>
+    }
+</div>

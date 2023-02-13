@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>@ViewBag.Title</title>
+    <link rel="icon" type="image/x-icon" href="/desertisland.svg.png">
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+    <link href="/css/styles.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed">
+    <div id="up"></div>
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3" href="/dashboard">@Constant.BlogName</a>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+
+        <!-- Navbar-->
+        <ul class="navbar-nav ms-auto me-3 me-lg-4">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <form method="post" action="/auth/logout">
+                    <li>
+                        <a class="dropdown-item" onclick="this.closest('form').submit();return false;" href="javascript:{}">Logout</a>
+                    </li>
+                    </form>
+                    <li>
+                        <a class="dropdown-item" onclick="this.closest('form').submit();return false;" href="/auth/change">Change Password</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <div class="sb-sidenav-menu-heading">
+                            <a href="/dashboard" class="link-light">Dashboard</a>
+                            </div>
+                        <a class="nav-link collapsed" href="/dashboard/topic" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                            <div class="sb-nav-link-icon"></div>
+                            Topic
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                @if (ViewBag.categories is not null)
+                                {
+                                    foreach (Category item in ViewBag.categories)
+                                    {
+                                        <tr>
+                                            <a class="nav-link" href="/dashboard/topic/@item.CategoryUrl">@item.CategoryName</a>
+                                        </tr>
+                                    }
+                                }
+                            </nav>
+                        </div>
+                        <a class="nav-link" href="/dashboard/category">
+                            <div class="sb-nav-link-icon"></div>
+                            Category
+                        </a>
+                        <a class="nav-link" href="/dashboard/member">
+                            <div class="sb-nav-link-icon"></div>
+                            Member
+                        </a>
+                        <a class="nav-link" href="/dashboard/role">
+                            <div class="sb-nav-link-icon"></div>
+                            Role
+                        </a>
+                    </div>
+                </div>
+                <div class="sb-sidenav-footer">
+                    <div class="small">Logged in as:</div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <span>@User.Identity.Name</span>
+                    }
+                </div>
+            </nav>
+        </div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4 mt-3 mb-4">
+                    @RenderBody()
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="/js/scripts.js"></script>
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+    <script src="/js/datatables-simple-demo.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+
+    <script src="/assets/demo/chart-bar-demo.js"></script>
+
+    <script>
+        let v = '@Context.Request.Path';
+        if(v.includes("/dashboard/topic")){
+            $('a[href = "/dashboard/topic"]').addClass('active');
+        };
+
+        $('div a.nav-link').each(function () {
+
+            if (v == $(this).attr('href')) {
+                $(this).addClass('active');
+            }
+            if (!v) {
+                $('.default').addClass('active');
+            }
+        });
+    </script>
+</body>
+</html>
+

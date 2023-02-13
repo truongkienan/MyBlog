@@ -1,0 +1,96 @@
+﻿@{
+    ViewData["Title"] = "Category";
+    Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
+}
+@model IEnumerable<Category>
+@if (TempData["msg"] != null)
+{
+    <p class="text-success">@TempData["msg"]</p>
+}
+<div class="card mb-4 mt-4">
+    <div class="card-header d-flex justify-content-between">
+        <div>
+            <i class="fas fa-table me-1"></i>
+            Category
+        </div>
+        <div>
+            <a href="/dashboard/category/create" class="btn btn-success btn-sm">Create</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row g-3 mb-3 align-items-center">
+            <div class="col-auto">
+                <select class="form-select form-select-sm showDefault">
+                    @if (ViewBag.categories is not null)
+                    {
+                        foreach (Category item in ViewBag.categories)
+                        {
+                            if (item.ShowDefault == true)
+                            {
+                                <option selected value="@item.CategoryId">@item.CategoryName</option>
+                            }
+                            else
+                            {
+                                <option value="@item.CategoryId">@item.CategoryName</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-auto">
+                <label>Show default</label>
+            </div>
+        </div>
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Category</th>
+                    <th>Friendly Url</th>
+                    <th>Position</th>
+                    <th>Active</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model is not null)
+                {
+                    foreach (Category item in Model)
+                    {
+                        <tr>
+                            <td>@item.CategoryName</td>
+                            <td>@item.CategoryUrl</td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="@item.CategoryId" value="@item.Position">
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="update(this)" type="button">Update</button>
+                                </div>
+                            </td>
+                            <td>@item.Active</td>
+                            <td>
+                                <a href="/dashboard/category/edit/@item.CategoryId"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section scripts{
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="/js/custom-swal.js"></script>
+    <script>
+        function update(p) {
+            let selector = $(p).closest('div').find('input');
+            $.post('/dashboard/category/update', { id: selector.attr('id'), vl: selector.val() }, (d) => {
+                customSwal(d);                
+            });
+        }
+
+        $("select.showDefault").change(function () {
+            let id = $(this).find("option:selected").val();
+            $.post(`/dashboard/category/ShowDefault/${id}`,(d)=>{
+                customSwal(d);
+            })
+        });
+    </script>
+}

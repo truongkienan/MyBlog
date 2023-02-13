@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
+}
+
+@model IEnumerable<Role>
+@if (TempData["msg"] != null)
+{
+    <p class="text-success">@TempData["msg"]</p>
+}
+
+
+<div class="card mt-3">
+    <div class="card-header d-flex justify-content-between">
+        <div>
+            <i class="fas fa-table me-1"></i>
+            Role
+        </div>
+        <div>
+            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">Create</button>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model is not null)
+                {
+                    foreach (Role item in Model)
+                    {
+                        <tr>
+                            <td>@item.RoleId</td>
+                            <td>@item.RoleName</td>
+                            <td>
+                                <a href="/dashboard/topic/edit/"><i class="fa-solid fa-pen-to-square"></i></a> | <i class="fa-solid fa-ban"></i>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<partial name="_Modal" model="new Role()" />
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+

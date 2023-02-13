@@ -1,0 +1,57 @@
+﻿@model CategoryAndTopic
+@{
+    ViewData["Title"] = Model.TopicName;
+}
+<style>
+    pre {
+        padding: 1em;
+        color: #353535;
+        background: hsla(0,0%,78%,.3);
+        border: 1px solid #c4c4c4;
+        border-radius: 2px;
+        text-align: left;
+        direction: ltr;
+        tab-size: 3;
+        font-style: normal;
+        min-width: 200px;
+        display: block;
+        margin-top: 0;
+        margin-bottom: 1rem;
+        overflow: auto;
+    }
+</style>
+<ol class="breadcrumb mb-2">
+    <li class="breadcrumb-item"><a href="/@Model.CategoryUrl">@Model.CategoryName</a></li>
+    <li class="breadcrumb-item active">@Model.TopicName</li>
+</ol>
+@Html.Raw(Model.Content)
+<!-- Modal -->
+<div class="modal fade" id="imgzoom" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close p-0" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <img src="" style="width: 100%;">
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        $('figure').each(function () {
+            var size = $(this).css('width');
+            $(this).css({ "width": "100%" });
+            $(this).addClass("d-flex justify-content-start");
+            $('>img', this).css('width', "100%");
+        });
+        //$('pre').addClass('bg-info');
+        $('figure img').click(function(){
+            console.log($(this).attr('src'));
+            $('.modal-body img').attr('src', $(this).attr('src'));
+            $('#imgzoom').modal('show');
+        });
+    </script>
+}
+

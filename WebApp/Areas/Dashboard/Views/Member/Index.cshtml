@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Member";
+    Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
+}
+
+@model IEnumerable<Member>
+@if (TempData["msg"] != null)
+{
+    <p class="text-success">@TempData["msg"]</p>
+}
+<div class="card mb-4 ">
+    <div class="card-header d-flex justify-content-between">
+        <div>
+            <i class="fas fa-table me-1"></i>
+            Member
+        </div>
+        <div>
+            <a href="/auth/register/" class="btn btn-success btn-sm">Create</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="datatablesSimple">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Fullname</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model is not null)
+                {
+                    foreach (Member item in Model)
+                    {
+                        <tr>
+                            <td>@item.Username</td>
+                            <td>@item.Fullname</td>
+                            <td>@item.Email</td>
+                            <td><a href="/dashboard/member/roles/@item.MemberId">Roles</a></td>
+                            <td>
+                                <a href="/dashboard/topic/edit/"><i class="fa-solid fa-pen-to-square"></i></a> | <i class="fa-solid fa-ban"></i>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

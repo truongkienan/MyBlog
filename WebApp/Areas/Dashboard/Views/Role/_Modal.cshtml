@@ -1,0 +1,58 @@
+﻿@model Role
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" action="/dashboard/role/create" class="modal-content role">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Role</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input class="form-control" type="text" asp-for="RoleName" />
+                    <span asp-validation-for="RoleName"></span>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <div>
+                    <span class="res"></span>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary role">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $('form').submit(function (e) {
+        e.preventDefault();
+        var f = $(this);
+        var url = f.attr('action');
+        $.post(url, f.serialize(), (d) => {
+            console.log(d);
+            const arr = ["Add failed", "Add failed"];
+            if (d > 0){
+                location.reload();
+            }
+            $('span.res').text(arr[d + 1]);
+        });
+    });
+
+            //$('button.role').click(function () {
+            //    console.log(222);
+            //    var d = $("form.role").serialize();
+
+            //    $.post('/dashboard/role/create', $('form').serialize(), (d) => {
+            //            console.log(d);
+            //            const arr = ["Add failed", "Add failed", "/dashboard/role"];
+            //            if(d>0){
+            //                window.location.replace("/dashboard/role);
+            //            }
+            //            swal(arr[d + 1]);
+            //        });
+            //});
+</script>

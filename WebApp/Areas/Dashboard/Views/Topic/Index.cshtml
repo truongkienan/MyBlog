@@ -1,0 +1,78 @@
+﻿@model Tuple<Category, IEnumerable<Topic>>
+@{
+    ViewData["Title"] = "Topic";
+    Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
+}
+<ol class="breadcrumb mb-4 mt-4">
+    <li class="breadcrumb-item">Topic</li>
+    <li class="breadcrumb-item active">@Model.Item1.CategoryName</li>
+</ol>
+@if (TempData["msg"] != null)
+{
+    <p class="text-success">@TempData["msg"]</p>
+}
+<div class="card mb-4 ">
+    <div class="card-header d-flex justify-content-between">
+        <div>
+            <i class="fas fa-table me-1"></i>
+            Category
+        </div>
+        <div>
+            <a href="/dashboard/topic/create/@Model.Item1.CategoryUrl" class="btn btn-success btn-sm">Create</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="datatablesSimple">
+            <thead>
+                <tr>
+                    <th>Topic</th>
+                    <th>Friendly URL</th>
+                    <th>Column</th>
+                    <th>Position</th>
+                    <th>Active</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Item2 is not null)
+                {
+                    foreach (Topic item in Model.Item2)
+                    {
+                        <tr>
+                            <td>@item.TopicName</td>
+                            <td>@item.TopicUrl</td>
+                            <td class="col" v="@item.ColumnIndex">@item.ColumnName</td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="@item.TopicId" value="@item.Position">
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="update(this)" type="button">Update</button>
+                                </div>
+                            </td>
+                            <td>@item.Active</td>
+                            <td>
+                                <a href="/dashboard/topic/edit/@item.TopicId"><i class="fa-solid fa-pen-to-square"></i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section scripts{
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="/js/custom-swal.js"></script>
+    <script>
+        function update(p) {
+            let selector = $(p).closest('div').find('input');
+            $.post('/dashboard/topic/update', { id: selector.attr('id'), vl: selector.val() }, (d) => {
+                customSwal(d);
+            });
+        }
+        $('.col').each(function () {
+            const arr = ["table-Warning", "table-info", "table-primary", "table-dark"];
+            $(this).closest('tr').addClass(arr[parseInt($(this).attr('v'))]);
+        });
+    </script>
+}
+

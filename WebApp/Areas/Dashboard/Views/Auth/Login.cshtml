@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Areas/Dashboard/Views/Shared/_LayoutAuth.cshtml";
+}
+@model LoginModel
+
+<div class="col-lg-5">
+    <div class="card shadow-lg border-0 rounded-lg mt-5">
+        <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
+        <div class="card-body">
+            @if (TempData["msg"] != null)
+            {
+                <p class="text-success">@TempData["msg"]</p>
+            }
+            <form method="post" action="/auth/login">
+                <div class="form-floating mb-3">
+                    <input class="form-control" asp-for="Username" type="text" />
+                    <label asp-for="Username">Username</label>
+                    <span asp-validation-for="Username"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input class="form-control" asp-for="Password" type="password" />
+                    <label asp-for="Password">Password</label>
+                    <span asp-validation-for="Password"></span>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" asp-for="Remember" type="checkbox" />
+                    <label class="form-check-label" asp-for="Remember">Remember</label>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                    <button class="btn btn-primary">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
