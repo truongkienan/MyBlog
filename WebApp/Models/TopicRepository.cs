@@ -25,30 +25,7 @@ namespace WebApp.Models
             }
             return dict;
         }
-        Dictionary<string, List<Topic>[]> GetAllWithColumn()
-        {
-            string sql = "SELECT CategoryName=null, Topic.* FROM Category " +
-                "JOIN Topic ON Category.CategoryUrl=Topic.CategoryUrl " +
-                "WHERE Category.Active=1 AND Topic.Active=1 ORDER BY CategoryUrl, ColumnIndex, Position";
 
-            IEnumerable<Topic> topics = context.Topics.FromSqlRaw<Topic>(sql);
-
-            Dictionary<string, List<Topic>[]> dict = new Dictionary<string, List<Topic>[]>();
-            foreach (Topic item in topics)
-            {
-                string k = item.CategoryUrl;
-                if (!dict.ContainsKey(k))
-                {
-                    dict[k] = new List<Topic>[4];
-                    for (int i = 0; i < 4; i++)
-                    {
-                        dict[k][i] = new List<Topic>();
-                    }
-                }
-                dict[k][item.ColumnIndex].Add(item);
-            }
-            return dict;
-        }
         public int Edit(Topic obj)
         {           
             SqlParameter[] sp =
@@ -165,14 +142,46 @@ namespace WebApp.Models
             }
             return GetTopics(item);
         }
+
         Tuple<Category, List<Topic>[]> GetTopics(Category ct)
         {
-            if (GetAllWithColumn().ContainsKey(ct.CategoryUrl))
+            Dictionary<string, List<Topic>[]> dict = GetAllWithColumn();
+            //if (GetAllWithColumn().ContainsKey(ct.CategoryUrl))
+            //{
+            //    return new Tuple<Category, List<Topic>[]>(ct, GetAllWithColumn()[ct.CategoryUrl]);
+            //}
+            if (dict.ContainsKey(ct.CategoryUrl))
             {
-                return new Tuple<Category, List<Topic>[]>(ct, GetAllWithColumn()[ct.CategoryUrl]);
+                return new Tuple<Category, List<Topic>[]>(ct, dict[ct.CategoryUrl]);
             }
             return new Tuple<Category, List<Topic>[]>(ct, null);
         }
+
+        Dictionary<string, List<Topic>[]> GetAllWithColumn()
+        {
+            string sql = "SELECT CategoryName=null, Topic.* FROM Category " +
+                "JOIN Topic ON Category.CategoryUrl=Topic.CategoryUrl " +
+                "WHERE Category.Active=1 AND Topic.Active=1 ORDER BY CategoryUrl, ColumnIndex, Position";
+
+            IEnumerable<Topic> topics = context.Topics.FromSqlRaw<Topic>(sql);
+
+            Dictionary<string, List<Topic>[]> dict = new Dictionary<string, List<Topic>[]>();
+            foreach (Topic item in topics)
+            {
+                string k = item.CategoryUrl;
+                if (!dict.ContainsKey(k))
+                {
+                    dict[k] = new List<Topic>[4];
+                    for (int i = 0; i < 4; i++)
+                    {
+                        dict[k][i] = new List<Topic>();
+                    }
+                }
+                dict[k][item.ColumnIndex].Add(item);
+            }
+            return dict;
+        }
+
         public int UpdatePostion(short id, short postion)
         {
             string sql = "UPDATE Topic SET Position = @Position WHERE TopicId = @Id";

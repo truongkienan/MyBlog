@@ -29,6 +29,5 @@ namespace WebApp.Models
             } 
         }
         public bool Active { get; set; }
-
     }
 }

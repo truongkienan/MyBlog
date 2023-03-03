@@ -14,7 +14,8 @@ namespace WebApp.Controllers
                 CategoryAndTopic obj = provider.Topic.GetTopicByUrl(category, topic);
                 if (obj != null)
                 {
-                    return View("Topic", provider.Topic.GetTopicByUrl(category, topic));
+                    //return View("Topic", provider.Topic.GetTopicByUrl(category, topic));
+                    return View("Topic", obj);
                 }
                 return Redirect("/404");
             }
