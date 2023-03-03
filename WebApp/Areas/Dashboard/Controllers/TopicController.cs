@@ -7,10 +7,11 @@ using WebApp.Models;
 namespace WebApp.Areas.Dashboard.Controllers
 {
     [Area("dashboard"), Authorize]
+    [ServiceFilter(typeof(CategoryFilter))]
     public class TopicController : BaseController
     {
         [Route("dashboard/topic/{category?}")]
-        [ServiceFilter(typeof(CategoryFilter))]
+
         public IActionResult Index(string category)
         {
             return View(provider.Topic.GetTopicsByCategory(category));
@@ -31,7 +32,6 @@ namespace WebApp.Areas.Dashboard.Controllers
         }
 
         [HttpGet("/dashboard/topic/create/{category}")]
-        [ServiceFilter(typeof(CategoryFilter))]
         public IActionResult Create(string category)
         {
             Topic obj = new Topic
@@ -44,7 +44,6 @@ namespace WebApp.Areas.Dashboard.Controllers
         }
 
         [HttpPost("/dashboard/topic/create/{category}")]
-        [ServiceFilter(typeof(CategoryFilter))]
         public IActionResult Create(Topic obj)
         {
             if (ModelState.IsValid)
@@ -57,14 +56,12 @@ namespace WebApp.Areas.Dashboard.Controllers
         }
 
         [HttpGet("/dashboard/topic/edit/{id?}")]
-        [ServiceFilter(typeof(CategoryFilter))]
         public IActionResult Edit(short id)
         {
             return View(provider.Topic.GetTopicById(id));
         }
 
         [HttpPost("/dashboard/topic/edit/{id?}")]
-        [ServiceFilter(typeof(CategoryFilter))]
         public IActionResult Edit(Topic obj)
         {
             if (ModelState.IsValid)
